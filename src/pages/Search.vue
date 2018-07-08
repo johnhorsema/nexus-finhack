@@ -1,15 +1,28 @@
 <template>
   <v-container fluid fill-height>
-    <v-layout justify-center align-center>
-      Search
-      <div id="graph-container"></div>
-    </v-layout>
+    <v-layout row wrap>
+      <v-flex xs12 md6>
+          <v-text-field
+            label="Company A"
+            placeholder="Company Name"
+            box
+          ></v-text-field>
+        </v-flex>
+        <v-flex xs12 md6>
+          <v-text-field
+            label="Company B"
+            placeholder="Company Name"
+            box
+          ></v-text-field>
+        </v-flex>
+        <div id="graph-container" ref="graph"></div>
+        </v-layout>
   </v-container>
 </template>
 
 <script>
 export default {
-    beforeMount: () => {
+    mounted: function() {
     	/**
 		 * This example shows the available edge label renderers for the canvas
 		 * renderer.
@@ -35,15 +48,18 @@ export default {
 		  });
 
 		// Instantiate sigma:
+		console.log(this.$refs.graph)
 		s = new sigma({
 		  graph: g,
 		  renderer: {
-		    container: document.getElementById('graph-container'),
+		    container: this.$refs.graph,
 		    type: 'canvas'
 		  },
 		  settings: {
+		    defaultLabelColor: '#fff',
 		    edgeLabelSize: 'proportional',
 		    edgeLabelThreshold: 3,
+		    edgeLabelColor: '#fff',
 		    minEdgeSize: 4
 		  }
 		});
@@ -55,26 +71,26 @@ export default {
 		  if (!s.graph.adjacentNodes || s.graph.adjacentNodes(source).map(function(n) { return n.id; }).indexOf(target) === -1) {
 		    s.graph.addEdge({
 		      id: 'e' + i,
-		      label: 'Edge ' + i,
+		      label: ['Apple','Microsoft','JIT Finance Co. Ltd','FInance Assets Management Limited','Zero Finance HK Limited','302 Limited','ACA Hill Limited','Brilliant Star Limited'][Math.random() * 4 | 0],
 		      source: source,
 		      target: target,
 		      size: Math.random(),
 		      color: '#ccc',
-		      type: ['line', 'curve', 'arrow', 'curvedArrow'][Math.random() * 4 | 0]
+		      type: 'curve'
 		    });
 		  }
 		}
 		s.refresh();
     }
   }
-</script
+</script>
 
 <style scoped>
-#graph-container {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  position: absolute;
-}
+    #graph-container {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      position: absolute;
+    }
 </style>
